@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SM2 协同签名系统 - 技术文档</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .badges {
+            margin-top: 20px;
+        }
+        .badges img {
+            margin: 0 5px;
+        }
+        nav {
+            background: #fff;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        nav li {
+            margin: 0 15px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #764ba2;
+        }
+        section {
+            background: #fff;
+            margin: 20px 0;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #333;
+            margin: 20px 0 10px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .feature-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .tech-badge {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+        }
+        .inline-code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #667eea;
+            color: white;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .architecture-diagram {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #764ba2;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            section {
+                padding: 20px;
+            }
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav li {
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔐 SM2 协同签名系统</h1>
+        <p>基于国密 SM2 算法的协同签名解决方案</p>
+        <div class="badges">
+            <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License">
+            <img src="https://img.shields.io/badge/Go-1.24-00ADD8?logo=go" alt="Go">
+            <img src="https://img.shields.io/badge/Rust-2021-orange?logo=rust" alt="Rust">
+            <img src="https://img.shields.io/badge/React-18-61DAFB?logo=react" alt="React">
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#overview">概述</a></li>
+            <li><a href="#features">特性</a></li>
+            <li><a href="#architecture">架构</a></li>
+            <li><a href="#quickstart">快速开始</a></li>
+            <li><a href="#api">API 文档</a></li>
+            <li><a href="#security">安全机制</a></li>
+            <li><a href="#license">许可证</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <section id="overview">
+            <h2>📋 概述</h2>
+            <p>SM2 协同签名系统是一个基于国密 SM2 椭圆曲线算法的协同签名解决方案。系统采用客户端-服务端分离架构，通过密钥分片技术实现私钥的安全存储和协同签名。</p>
+            
+            <div class="info-box">
+                <strong>核心原理：</strong>将完整私钥分为 D1（客户端持有）和 D2（服务端持有）两部分，签名时双方协同计算，确保完整私钥永不出现。
+            </div>
+
+            <h3>技术栈</h3>
+            <div class="tech-stack">
+                <span class="tech-badge">Go 1.24</span>
+                <span class="tech-badge">Rust 2021</span>
+                <span class="tech-badge">React 18</span>
+                <span class="tech-badge">SM2/SM3/SM4</span>
+                <span class="tech-badge">SQLite</span>
+                <span class="tech-badge">Fiber v2</span>
+                <span class="tech-badge">libsm</span>
+            </div>
+        </section>
+
+        <section id="features">
+            <h2>✨ 特性</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🔐 密钥分片</h4>
+                    <p>私钥分为两部分独立存储，完整私钥永不出现，从根本上保障密钥安全。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>✍️ 协同签名</h4>
+                    <p>客户端与服务端协同完成签名计算，支持标准 SM2 签名验证。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔓 协同解密</h4>
+                    <p>支持 SM2 密文的协同解密，保障加密通信安全。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🌐 REST API</h4>
+                    <p>提供完整的 REST API 接口，支持业务系统快速集成。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🖥️ Web 管理控制台</h4>
+                    <p>提供用户管理、密钥管理、审计日志等管理功能。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📦 多平台支持</h4>
+                    <p>客户端支持 Windows/Linux 动态库，便于集成到各类应用。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture">
+            <h2>🏗️ 系统架构</h2>
+            <div class="architecture-diagram">
+┌─────────────────────────────────────────────────────────────┐
+│                        应用层                                │
+├──────────────────────┬──────────────────────────────────────┤
+│  业务应用系统         │  Web 管理控制台                      │
+│  - 签名请求          │  - 密钥管理                          │
+│  - 加密请求          │  - 用户管理                          │
+│  - 验证请求          │  - 日志审计                          │
+└──────────┬───────────┴───────────┬────────────────────────┘
+           │                       │
+           ▼                       ▼
+┌──────────────────────┐  ┌──────────────────────────────────┐
+│  客户端 SDK (Rust)   │  │  HTTP API (管理端口)             │
+│  - 密钥分片          │  │  - GET /mapi/users               │
+│  - 密码计算          │  │  - GET /mapi/keys                │
+│  - FFI 接口          │  │  - GET /mapi/logs                │
+└──────────┬───────────┘  └──────────────────────────────────┘
+           │ HTTP/HTTPS
+           ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    服务端 (Go + Fiber)                       │
+├─────────────────────────────────────────────────────────────┤
+│  HTTP API (业务端口: 9002)                                  │
+│  - POST /api/register    用户注册                           │
+│  - POST /api/login       用户登录                           │
+│  - POST /api/sign        协同签名                            │
+│  - POST /api/decrypt     协同解密                            │
+├─────────────────────────────────────────────────────────────┤
+│  存储层: SQLite + 审计日志                                   │
+└─────────────────────────────────────────────────────────────┘
+            </div>
+
+            <h3>模块组成</h3>
+            <table>
+                <tr>
+                    <th>模块</th>
+                    <th>技术栈</th>
+                    <th>描述</th>
+                </tr>
+                <tr>
+                    <td><strong>backend</strong></td>
+                    <td>Go 1.24 + Fiber v2</td>
+                    <td>服务端程序，提供 REST API 接口</td>
+                </tr>
+                <tr>
+                    <td><strong>client</strong></td>
+                    <td>Rust 2021 + libsm</td>
+                    <td>客户端 SDK，支持 FFI 接口</td>
+                </tr>
+                <tr>
+                    <td><strong>frontend</strong></td>
+                    <td>React 18 + Ant Design</td>
+                    <td>Web 管理控制台</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="quickstart">
+            <h2>🚀 快速开始</h2>
+            
+            <h3>克隆仓库</h3>
+            <pre><code>git clone --recursive https://github.com/kintaiW/sm2-co-sign.git
+cd sm2-co-sign</code></pre>
+
+            <h3>启动服务端</h3>
+            <pre><code>cd backend
+go mod tidy
+go run cmd/server/main.go</code></pre>
+
+            <h3>构建客户端</h3>
+            <pre><code>cd client
+cargo build --release</code></pre>
+
+            <h3>启动前端</h3>
+            <pre><code>cd frontend
+npm install
+npm run dev</code></pre>
+
+            <div class="warning-box">
+                <strong>⚠️ 安全提示：</strong>生产环境请务必修改默认管理员密码，并配置 HTTPS。
+            </div>
+        </section>
+
+        <section id="api">
+            <h2>📡 API 文档</h2>
+            
+            <h3>业务接口 (/api/*)</h3>
+            <table>
+                <tr>
+                    <th>接口</th>
+                    <th>方法</th>
+                    <th>描述</th>
+                    <th>认证</th>
+                </tr>
+                <tr>
+                    <td><code>/api/register</code></td>
+                    <td>POST</td>
+                    <td>用户注册（生成密钥对）</td>
+                    <td>无</td>
+                </tr>
+                <tr>
+                    <td><code>/api/login</code></td>
+                    <td>POST</td>
+                    <td>用户登录（获取 Token）</td>
+                    <td>无</td>
+                </tr>
+                <tr>
+                    <td><code>/api/sign</code></td>
+                    <td>POST</td>
+                    <td>协同签名</td>
+                    <td>Bearer Token</td>
+                </tr>
+                <tr>
+                    <td><code>/api/decrypt</code></td>
+                    <td>POST</td>
+                    <td>协同解密</td>
+                    <td>Bearer Token</td>
+                </tr>
+            </table>
+
+            <h3>管理接口 (/mapi/*)</h3>
+            <table>
+                <tr>
+                    <th>接口</th>
+                    <th>方法</th>
+                    <th>描述</th>
+                </tr>
+                <tr>
+                    <td><code>/mapi/users</code></td>
+                    <td>GET</td>
+                    <td>获取用户列表</td>
+                </tr>
+                <tr>
+                    <td><code>/mapi/keys</code></td>
+                    <td>GET</td>
+                    <td>获取密钥列表</td>
+                </tr>
+                <tr>
+                    <td><code>/mapi/logs</code></td>
+                    <td>GET</td>
+                    <td>查询审计日志</td>
+                </tr>
+                <tr>
+                    <td><code>/mapi/health</code></td>
+                    <td>GET</td>
+                    <td>健康检查</td>
+                </tr>
+            </table>
+
+            <p style="margin-top: 20px;">
+                <a href="https://github.com/kintaiW/sm2-co-sign/blob/main/docs/api-reference.md" class="btn">查看完整 API 文档</a>
+            </p>
+        </section>
+
+        <section id="security">
+            <h2>🛡️ 安全机制</h2>
+            
+            <h3>密钥分片原理</h3>
+            <div class="architecture-diagram">
+客户端                                服务端
+  |                                     |
+  |-- 1. 生成 d1 (随机数)               |
+  |-- 2. 计算 P1 = d1 * G              |
+  |                                     |
+  |--- POST /api/register {p1} ------->|
+  |                                     |-- 3. 生成 d2 (随机数)
+  |                                     |-- 4. 计算 Pa = d2Inv * P1 + (n-1) * G
+  |<--- {userId, p2, pa} --------------|
+  |                                     |
+  |-- 5. 存储 d1 本地                   |
+
+完整私钥: d = d1 * d2 - 1 (不存储)
+            </div>
+
+            <h3>安全特性</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🔑 密钥隔离</h4>
+                    <p>客户端持有 d1，服务端持有 d2，完整私钥 d 不在任何一方存储。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔒 传输安全</h4>
+                    <p>所有敏感数据使用 Base64 编码，生产环境必须使用 HTTPS。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎫 Token 认证</h4>
+                    <p>使用 Bearer Token 认证，Token 有过期时间。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📝 审计日志</h4>
+                    <p>所有关键操作记录审计日志，支持追溯。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="license">
+            <h2>📄 许可证</h2>
+            <p>本项目采用 <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a> 许可证。</p>
+            
+            <h3>仓库链接</h3>
+            <p>
+                <a href="https://github.com/kintaiW/sm2-co-sign" class="btn">主仓库</a>
+                <a href="https://github.com/kintaiW/sm2-co-sign-server" class="btn btn-outline">服务端</a>
+                <a href="https://github.com/kintaiW/sm2-co-sign-client" class="btn btn-outline">客户端</a>
+            </p>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024-2026 SM2 Co-Sign Team. Apache License 2.0</p>
+        <p>
+            <a href="https://github.com/kintaiW/sm2-co-sign">GitHub</a> | 
+            <a href="https://github.com/kintaiW/sm2-co-sign/issues">Issues</a> | 
+            <a href="https://github.com/kintaiW/sm2-co-sign/blob/main/docs/architecture.md">架构文档</a>
+        </p>
+    </footer>
+</body>
+</html>
