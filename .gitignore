@@ -1,0 +1,49 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
+
+# Temporary files
+.DS_Store
+*~
+
+# Environment variables
+.env
+.env.local
+
+# Documentation
+*.rst
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Linux
+*~
+
+# Backup files
+*.bak
+*.backup
+
+# Secrets
+*.key
+*.pem
+*.pfx
+*.p12
+
+# Certificates
+*.crt
+*.csr
+
+# Reference project
+docker-cosign/
+.codebuddy/
+.trae/

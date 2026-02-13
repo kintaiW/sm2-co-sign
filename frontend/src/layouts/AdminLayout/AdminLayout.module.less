@@ -1,0 +1,100 @@
+.layout {
+  min-height: 100vh;
+}
+
+.sider {
+  position: relative;
+  
+  .logo {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    
+    .logoIcon {
+      font-size: 28px;
+      color: #1890ff;
+    }
+    
+    .logoText {
+      margin-left: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+    }
+  }
+  
+  .footer {
+    position: absolute;
+    bottom: 16px;
+    left: 0;
+    right: 0;
+    padding: 0 16px;
+    
+    .githubLink {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 12px;
+      text-decoration: none;
+      transition: color 0.3s;
+      
+      &:hover {
+        color: #1890ff;
+      }
+    }
+  }
+}
+
+.header {
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  
+  .trigger {
+    font-size: 18px;
+    padding: 0 12px;
+    cursor: pointer;
+    transition: color 0.3s;
+    
+    &:hover {
+      color: #1890ff;
+    }
+  }
+  
+  .headerRight {
+    display: flex;
+    align-items: center;
+    
+    .userInfo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.3s;
+      
+      &:hover {
+        background: rgba(0, 0, 0, 0.025);
+      }
+      
+      .username {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.content {
+  margin: 16px;
+  padding: 24px;
+  min-height: calc(100vh - 64px - 32px);
+  overflow: auto;
+}

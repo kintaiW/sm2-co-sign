@@ -1,0 +1,6 @@
+[submodule "backend"]
+	path = backend
+	url = https://github.com/kintaiW/sm2-co-sign-server.git
+[submodule "client"]
+	path = client
+	url = https://github.com/kintaiW/sm2-co-sign-client.git
