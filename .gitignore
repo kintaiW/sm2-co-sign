@@ -45,5 +45,14 @@ ehthumbs.db
 
 # Reference project
 docker-cosign/
-.codebuddy/
-.trae/
+
+# Frontend build artifacts
+frontend/dist/
+frontend/node_modules/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
