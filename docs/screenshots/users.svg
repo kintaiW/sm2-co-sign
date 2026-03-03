@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680">
+  <defs>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="680" fill="#f0f2f5"/>
+
+  <!-- Sidebar -->
+  <rect width="208" height="680" fill="#001529"/>
+  <rect x="0" y="0" width="208" height="64" fill="#002140"/>
+  <rect x="16" y="20" width="32" height="24" rx="4" fill="#1677ff"/>
+  <text x="56" y="36" fill="#ffffff" font-size="14" font-weight="600">SM2 协同签名</text>
+
+  <text x="16" y="84" fill="#ffffff" font-size="14" opacity="0.7">📊  仪表盘</text>
+  <rect x="0" y="96" width="208" height="48" fill="#1677ff" opacity="0.2"/>
+  <text x="16" y="126" fill="#1677ff" font-size="14" font-weight="500">👥  用户管理</text>
+  <text x="16" y="172" fill="#ffffff" font-size="14" opacity="0.7">🔑  密钥管理</text>
+  <text x="16" y="220" fill="#ffffff" font-size="14" opacity="0.7">✍️  签名服务</text>
+  <text x="16" y="268" fill="#ffffff" font-size="14" opacity="0.7">📋  操作日志</text>
+
+  <!-- Header -->
+  <rect x="208" y="0" width="992" height="64" fill="#ffffff"/>
+  <text x="228" y="26" fill="#00000040" font-size="12">系统</text>
+  <text x="248" y="26" fill="#00000040" font-size="12">/</text>
+  <text x="258" y="26" fill="#000000d9" font-size="12">用户管理</text>
+  <text x="228" y="48" fill="#000000d9" font-size="18" font-weight="600">用户管理</text>
+  <circle cx="1140" cy="32" r="16" fill="#1677ff"/>
+  <text x="1133" y="37" fill="#ffffff" font-size="13">管</text>
+
+  <!-- Search bar + button -->
+  <rect x="228" y="80" width="908" height="72" rx="8" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.06))"/>
+  <rect x="248" y="98" width="240" height="36" rx="6" fill="#ffffff" stroke="#d9d9d9" stroke-width="1"/>
+  <text x="262" y="121" fill="#00000040" font-size="13">搜索用户名...</text>
+  <rect x="500" y="98" width="80" height="36" rx="6" fill="#1677ff"/>
+  <text x="519" y="121" fill="#ffffff" font-size="13">搜索</text>
+  <rect x="592" y="98" width="80" height="36" rx="6" fill="#ffffff" stroke="#d9d9d9" stroke-width="1"/>
+  <text x="612" y="121" fill="#000000d9" font-size="13">刷新</text>
+  <text x="1050" y="121" fill="#00000073" font-size="13">共 42 条记录</text>
+
+  <!-- Table -->
+  <rect x="228" y="168" width="908" height="460" rx="8" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.06))"/>
+
+  <!-- Table header -->
+  <rect x="228" y="168" width="908" height="46" rx="8" fill="#fafafa"/>
+  <rect x="228" y="192" width="908" height="22" fill="#fafafa"/>
+  <text x="268" y="196" fill="#00000089" font-size="13" font-weight="600">用户ID</text>
+  <text x="448" y="196" fill="#00000089" font-size="13" font-weight="600">用户名</text>
+  <text x="598" y="196" fill="#00000089" font-size="13" font-weight="600">公钥（前32位）</text>
+  <text x="838" y="196" fill="#00000089" font-size="13" font-weight="600">状态</text>
+  <text x="918" y="196" fill="#00000089" font-size="13" font-weight="600">创建时间</text>
+  <text x="1060" y="196" fill="#00000089" font-size="13" font-weight="600">操作</text>
+
+  <!-- Data rows -->
+  <!-- Row 1 -->
+  <line x1="228" y1="214" x2="1136" y2="214" stroke="#f0f0f0" stroke-width="1"/>
+  <text x="268" y="242" fill="#000000d9" font-size="13">e3a1f2c9...</text>
+  <text x="448" y="242" fill="#000000d9" font-size="13">alice</text>
+  <text x="598" y="242" fill="#000000d9" font-size="13" font-family="monospace">04a7b3c2d1e0f9a8...</text>
+  <rect x="838" y="228" width="44" height="20" rx="10" fill="#f6ffed"/>
+  <text x="850" y="242" fill="#52c41a" font-size="12">启用</text>
+  <text x="918" y="242" fill="#000000d9" font-size="13">2026-02-15</text>
+  <text x="1060" y="242" fill="#1677ff" font-size="13">查看</text>
+  <text x="1100" y="242" fill="#ff4d4f" font-size="13">删除</text>
+
+  <!-- Row 2 -->
+  <line x1="228" y1="258" x2="1136" y2="258" stroke="#f0f0f0" stroke-width="1"/>
+  <text x="268" y="286" fill="#000000d9" font-size="13">b7d4e1a0...</text>
+  <text x="448" y="286" fill="#000000d9" font-size="13">bob</text>
+  <text x="598" y="286" fill="#000000d9" font-size="13" font-family="monospace">02f1e8d7c6b5a4...</text>
+  <rect x="838" y="272" width="44" height="20" rx="10" fill="#f6ffed"/>
+  <text x="850" y="286" fill="#52c41a" font-size="12">启用</text>
+  <text x="918" y="286" fill="#000000d9" font-size="13">2026-02-18</text>
+  <text x="1060" y="286" fill="#1677ff" font-size="13">查看</text>
+  <text x="1100" y="286" fill="#ff4d4f" font-size="13">删除</text>
+
+  <!-- Row 3 -->
+  <line x1="228" y1="302" x2="1136" y2="302" stroke="#f0f0f0" stroke-width="1"/>
+  <text x="268" y="330" fill="#000000d9" font-size="13">c2a9f8b3...</text>
+  <text x="448" y="330" fill="#000000d9" font-size="13">carol</text>
+  <text x="598" y="330" fill="#000000d9" font-size="13" font-family="monospace">03c4d5e6f7a8b9...</text>
+  <rect x="838" y="316" width="44" height="20" rx="10" fill="#fff1f0"/>
+  <text x="850" y="330" fill="#ff4d4f" font-size="12">禁用</text>
+  <text x="918" y="330" fill="#000000d9" font-size="13">2026-02-20</text>
+  <text x="1060" y="330" fill="#1677ff" font-size="13">查看</text>
+  <text x="1100" y="330" fill="#ff4d4f" font-size="13">删除</text>
+
+  <!-- Row 4 -->
+  <line x1="228" y1="346" x2="1136" y2="346" stroke="#f0f0f0" stroke-width="1"/>
+  <text x="268" y="374" fill="#000000d9" font-size="13">d5f6c8e1...</text>
+  <text x="448" y="374" fill="#000000d9" font-size="13">david</text>
+  <text x="598" y="374" fill="#000000d9" font-size="13" font-family="monospace">04e9a1b2c3d4e5...</text>
+  <rect x="838" y="360" width="44" height="20" rx="10" fill="#f6ffed"/>
+  <text x="850" y="374" fill="#52c41a" font-size="12">启用</text>
+  <text x="918" y="374" fill="#000000d9" font-size="13">2026-02-22</text>
+  <text x="1060" y="374" fill="#1677ff" font-size="13">查看</text>
+  <text x="1100" y="374" fill="#ff4d4f" font-size="13">删除</text>
+
+  <!-- Row 5 -->
+  <line x1="228" y1="390" x2="1136" y2="390" stroke="#f0f0f0" stroke-width="1"/>
+  <text x="268" y="418" fill="#000000d9" font-size="13">f1b2a4d7...</text>
+  <text x="448" y="418" fill="#000000d9" font-size="13">eve</text>
+  <text x="598" y="418" fill="#000000d9" font-size="13" font-family="monospace">02b8c7d6e5f4a3...</text>
+  <rect x="838" y="404" width="44" height="20" rx="10" fill="#f6ffed"/>
+  <text x="850" y="418" fill="#52c41a" font-size="12">启用</text>
+  <text x="918" y="418" fill="#000000d9" font-size="13">2026-02-25</text>
+  <text x="1060" y="418" fill="#1677ff" font-size="13">查看</text>
+  <text x="1100" y="418" fill="#ff4d4f" font-size="13">删除</text>
+
+  <!-- Row 6 -->
+  <line x1="228" y1="434" x2="1136" y2="434" stroke="#f0f0f0" stroke-width="1"/>
+  <text x="268" y="462" fill="#000000d9" font-size="13">a4c3b2e5...</text>
+  <text x="448" y="462" fill="#000000d9" font-size="13">frank</text>
+  <text x="598" y="462" fill="#000000d9" font-size="13" font-family="monospace">04f3e2d1c0b9a8...</text>
+  <rect x="838" y="448" width="44" height="20" rx="10" fill="#f6ffed"/>
+  <text x="850" y="462" fill="#52c41a" font-size="12">启用</text>
+  <text x="918" y="462" fill="#000000d9" font-size="13">2026-02-28</text>
+  <text x="1060" y="462" fill="#1677ff" font-size="13">查看</text>
+  <text x="1100" y="462" fill="#ff4d4f" font-size="13">删除</text>
+
+  <!-- Row 7 -->
+  <line x1="228" y1="478" x2="1136" y2="478" stroke="#f0f0f0" stroke-width="1"/>
+  <text x="268" y="506" fill="#000000d9" font-size="13">9e8d7c6b...</text>
+  <text x="448" y="506" fill="#000000d9" font-size="13">grace</text>
+  <text x="598" y="506" fill="#000000d9" font-size="13" font-family="monospace">03a2b3c4d5e6f7...</text>
+  <rect x="838" y="492" width="44" height="20" rx="10" fill="#f6ffed"/>
+  <text x="850" y="506" fill="#52c41a" font-size="12">启用</text>
+  <text x="918" y="506" fill="#000000d9" font-size="13">2026-03-01</text>
+  <text x="1060" y="506" fill="#1677ff" font-size="13">查看</text>
+  <text x="1100" y="506" fill="#ff4d4f" font-size="13">删除</text>
+
+  <!-- Row 8 -->
+  <line x1="228" y1="522" x2="1136" y2="522" stroke="#f0f0f0" stroke-width="1"/>
+  <text x="268" y="550" fill="#000000d9" font-size="13">5f4e3d2c...</text>
+  <text x="448" y="550" fill="#000000d9" font-size="13">henry</text>
+  <text x="598" y="550" fill="#000000d9" font-size="13" font-family="monospace">04d1e2f3a4b5c6...</text>
+  <rect x="838" y="536" width="44" height="20" rx="10" fill="#fff1f0"/>
+  <text x="850" y="550" fill="#ff4d4f" font-size="12">禁用</text>
+  <text x="918" y="550" fill="#000000d9" font-size="13">2026-03-02</text>
+  <text x="1060" y="550" fill="#1677ff" font-size="13">查看</text>
+  <text x="1100" y="550" fill="#ff4d4f" font-size="13">删除</text>
+
+  <!-- Pagination -->
+  <line x1="228" y1="580" x2="1136" y2="580" stroke="#f0f0f0" stroke-width="1"/>
+  <text x="248" y="608" fill="#00000073" font-size="13">共 42 条</text>
+  <rect x="1000" y="590" width="32" height="28" rx="4" fill="#ffffff" stroke="#d9d9d9" stroke-width="1"/>
+  <text x="1012" y="609" fill="#000000d9" font-size="13">‹</text>
+  <rect x="1038" y="590" width="32" height="28" rx="4" fill="#1677ff"/>
+  <text x="1050" y="609" fill="#ffffff" font-size="13">1</text>
+  <rect x="1076" y="590" width="32" height="28" rx="4" fill="#ffffff" stroke="#d9d9d9" stroke-width="1"/>
+  <text x="1088" y="609" fill="#000000d9" font-size="13">2</text>
+  <rect x="1114" y="590" width="32" height="28" rx="4" fill="#ffffff" stroke="#d9d9d9" stroke-width="1"/>
+  <text x="1126" y="609" fill="#000000d9" font-size="13">›</text>
+</svg>

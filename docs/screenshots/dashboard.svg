@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <defs>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      .sidebar { fill: #001529; }
+      .content { fill: #f0f2f5; }
+      .card { fill: #ffffff; rx: 8; }
+      .menu-item { fill: #ffffff; opacity: 0.65; font-size: 14px; }
+      .menu-item-active { fill: #1677ff; font-size: 14px; }
+      .title { fill: #000000d9; font-size: 16px; font-weight: 600; }
+      .stat-value { fill: #000000d9; font-size: 28px; font-weight: 600; }
+      .stat-label { fill: #00000073; font-size: 14px; }
+      .tag-green { fill: #52c41a; }
+      .tag-blue { fill: #1677ff; }
+      .header { fill: #ffffff; }
+      .thead { fill: #fafafa; }
+      .td { fill: #000000d9; font-size: 13px; }
+      .th { fill: #00000089; font-size: 13px; font-weight: 600; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="720" fill="#f0f2f5"/>
+
+  <!-- Sidebar -->
+  <rect width="208" height="720" fill="#001529"/>
+
+  <!-- Logo area -->
+  <rect x="0" y="0" width="208" height="64" fill="#002140"/>
+  <rect x="16" y="20" width="32" height="24" rx="4" fill="#1677ff"/>
+  <text x="56" y="36" fill="#ffffff" font-size="14" font-weight="600">SM2 协同签名</text>
+
+  <!-- Menu items -->
+  <rect x="0" y="64" width="208" height="48" fill="#1677ff" opacity="0.2"/>
+  <text x="16" y="82" fill="#1677ff" font-size="16">📊</text>
+  <text x="40" y="84" fill="#1677ff" font-size="14" font-weight="500">仪表盘</text>
+
+  <text x="16" y="134" fill="#ffffff" font-size="16" opacity="0.7">👥</text>
+  <text x="40" y="136" fill="#ffffff" font-size="14" opacity="0.7">用户管理</text>
+
+  <text x="16" y="182" fill="#ffffff" font-size="16" opacity="0.7">🔑</text>
+  <text x="40" y="184" fill="#ffffff" font-size="14" opacity="0.7">密钥管理</text>
+
+  <text x="16" y="230" fill="#ffffff" font-size="16" opacity="0.7">✍️</text>
+  <text x="40" y="232" fill="#ffffff" font-size="14" opacity="0.7">签名服务</text>
+
+  <text x="16" y="278" fill="#ffffff" font-size="16" opacity="0.7">📋</text>
+  <text x="40" y="280" fill="#ffffff" font-size="14" opacity="0.7">操作日志</text>
+
+  <!-- Top header -->
+  <rect x="208" y="0" width="992" height="64" fill="#ffffff" filter="url(#shadow)"/>
+  <text x="228" y="38" fill="#00000073" font-size="13">仪表盘</text>
+  <circle cx="1140" cy="32" r="16" fill="#1677ff"/>
+  <text x="1133" y="37" fill="#ffffff" font-size="13">管</text>
+  <text x="1100" y="37" fill="#00000073" font-size="13">admin</text>
+
+  <!-- Stat Cards Row -->
+  <!-- Card 1: 密钥总数 -->
+  <rect x="228" y="80" width="218" height="110" rx="8" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.08))"/>
+  <text x="248" y="110" fill="#00000073" font-size="13">密钥总数</text>
+  <text x="248" y="150" fill="#000000d9" font-size="30" font-weight="600">128</text>
+  <text x="248" y="175" fill="#52c41a" font-size="12">↑ 12 较昨日</text>
+  <rect x="390" y="88" width="36" height="36" rx="18" fill="#e6f4ff"/>
+  <text x="400" y="112" fill="#1677ff" font-size="20">🔑</text>
+
+  <!-- Card 2: 今日签名 -->
+  <rect x="458" y="80" width="218" height="110" rx="8" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.08))"/>
+  <text x="478" y="110" fill="#00000073" font-size="13">今日签名</text>
+  <text x="478" y="150" fill="#000000d9" font-size="30" font-weight="600">1,024</text>
+  <text x="478" y="175" fill="#52c41a" font-size="12">↑ 86 较昨日</text>
+  <rect x="620" y="88" width="36" height="36" rx="18" fill="#f6ffed"/>
+  <text x="630" y="112" fill="#52c41a" font-size="20">✍️</text>
+
+  <!-- Card 3: 活跃用户 -->
+  <rect x="688" y="80" width="218" height="110" rx="8" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.08))"/>
+  <text x="708" y="110" fill="#00000073" font-size="13">活跃用户</text>
+  <text x="708" y="150" fill="#000000d9" font-size="30" font-weight="600">37</text>
+  <text x="708" y="175" fill="#ff4d4f" font-size="12">↓ 3 较昨日</text>
+  <rect x="850" y="88" width="36" height="36" rx="18" fill="#fff7e6"/>
+  <text x="860" y="112" fill="#fa8c16" font-size="20">👥</text>
+
+  <!-- Card 4: 服务状态 -->
+  <rect x="918" y="80" width="218" height="110" rx="8" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.08))"/>
+  <text x="938" y="110" fill="#00000073" font-size="13">服务状态</text>
+  <text x="938" y="150" fill="#52c41a" font-size="22" font-weight="600">● 运行中</text>
+  <text x="938" y="175" fill="#00000073" font-size="12">响应时间 2.3ms</text>
+  <rect x="1080" y="88" width="36" height="36" rx="18" fill="#f6ffed"/>
+  <text x="1090" y="112" fill="#52c41a" font-size="20">✅</text>
+
+  <!-- Chart area: 签名趋势 -->
+  <rect x="228" y="208" width="580" height="270" rx="8" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.08))"/>
+  <text x="248" y="235" fill="#000000d9" font-size="15" font-weight="600">签名趋势</text>
+  <!-- Chart grid lines -->
+  <line x1="268" y1="260" x2="788" y2="260" stroke="#f0f0f0" stroke-width="1"/>
+  <line x1="268" y1="300" x2="788" y2="300" stroke="#f0f0f0" stroke-width="1"/>
+  <line x1="268" y1="340" x2="788" y2="340" stroke="#f0f0f0" stroke-width="1"/>
+  <line x1="268" y1="380" x2="788" y2="380" stroke="#f0f0f0" stroke-width="1"/>
+  <line x1="268" y1="420" x2="788" y2="420" stroke="#f0f0f0" stroke-width="1"/>
+  <!-- Y axis labels -->
+  <text x="248" y="264" fill="#00000040" font-size="11">1200</text>
+  <text x="248" y="304" fill="#00000040" font-size="11">900</text>
+  <text x="248" y="344" fill="#00000040" font-size="11">600</text>
+  <text x="248" y="384" fill="#00000040" font-size="11">300</text>
+  <text x="248" y="424" fill="#00000040" font-size="11">0</text>
+  <!-- Line chart path -->
+  <polyline points="288,400 360,360 432,330 504,310 576,280 648,260 720,270 788,250" fill="none" stroke="#1677ff" stroke-width="2.5"/>
+  <polyline points="288,400 360,360 432,330 504,310 576,280 648,260 720,270 788,250" fill="url(#blueGrad)" opacity="0.15"/>
+  <!-- X axis labels -->
+  <text x="276" y="445" fill="#00000040" font-size="11">02-25</text>
+  <text x="344" y="445" fill="#00000040" font-size="11">02-26</text>
+  <text x="416" y="445" fill="#00000040" font-size="11">02-27</text>
+  <text x="488" y="445" fill="#00000040" font-size="11">02-28</text>
+  <text x="560" y="445" fill="#00000040" font-size="11">03-01</text>
+  <text x="632" y="445" fill="#00000040" font-size="11">03-02</text>
+  <text x="704" y="445" fill="#00000040" font-size="11">03-03</text>
+  <!-- Data points -->
+  <circle cx="288" cy="400" r="4" fill="#1677ff"/>
+  <circle cx="360" cy="360" r="4" fill="#1677ff"/>
+  <circle cx="432" cy="330" r="4" fill="#1677ff"/>
+  <circle cx="504" cy="310" r="4" fill="#1677ff"/>
+  <circle cx="576" cy="280" r="4" fill="#1677ff"/>
+  <circle cx="648" cy="260" r="4" fill="#1677ff"/>
+  <circle cx="720" cy="270" r="4" fill="#1677ff"/>
+  <circle cx="788" cy="250" r="4" fill="#1677ff"/>
+
+  <!-- Pie chart: 密钥状态 -->
+  <rect x="818" y="208" width="318" height="270" rx="8" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.08))"/>
+  <text x="838" y="235" fill="#000000d9" font-size="15" font-weight="600">密钥状态</text>
+  <!-- Pie chart -->
+  <circle cx="940" cy="340" r="80" fill="#f0f0f0"/>
+  <!-- Enabled slice: 78% -->
+  <path d="M940,340 L940,260 A80,80 0 1,1 813,373 Z" fill="#1677ff"/>
+  <!-- Disabled slice: 22% -->
+  <path d="M940,340 L813,373 A80,80 0 0,1 940,260 Z" fill="#ff4d4f"/>
+  <!-- Center hole -->
+  <circle cx="940" cy="340" r="48" fill="#ffffff"/>
+  <text x="915" y="338" fill="#000000d9" font-size="14" font-weight="600">78%</text>
+  <text x="910" y="354" fill="#00000073" font-size="11">已启用</text>
+  <!-- Legend -->
+  <rect x="1040" y="315" width="10" height="10" rx="2" fill="#1677ff"/>
+  <text x="1056" y="325" fill="#000000d9" font-size="12">已启用 (100)</text>
+  <rect x="1040" y="340" width="10" height="10" rx="2" fill="#ff4d4f"/>
+  <text x="1056" y="350" fill="#000000d9" font-size="12">已禁用 (28)</text>
+
+  <!-- Recent Operations Table -->
+  <rect x="228" y="494" width="908" height="210" rx="8" fill="#ffffff" filter="drop-shadow(0 1px 4px rgba(0,0,0,0.08))"/>
+  <text x="248" y="520" fill="#000000d9" font-size="15" font-weight="600">最近操作记录</text>
+  <!-- Table header -->
+  <rect x="228" y="530" width="908" height="36" rx="0" fill="#fafafa"/>
+  <text x="248" y="553" fill="#00000089" font-size="13" font-weight="600">时间</text>
+  <text x="388" y="553" fill="#00000089" font-size="13" font-weight="600">用户ID</text>
+  <text x="568" y="553" fill="#00000089" font-size="13" font-weight="600">操作</text>
+  <text x="708" y="553" fill="#00000089" font-size="13" font-weight="600">详情</text>
+  <text x="1038" y="553" fill="#00000089" font-size="13" font-weight="600">IP地址</text>
+  <!-- Row 1 -->
+  <line x1="228" y1="566" x2="1136" y2="566" stroke="#f0f0f0" stroke-width="1"/>
+  <text x="248" y="585" fill="#000000d9" font-size="13">2026-03-03 14:32:01</text>
+  <text x="388" y="585" fill="#000000d9" font-size="13">user_abc123</text>
+  <rect x="568" y="571" width="44" height="20" rx="10" fill="#e6f4ff"/>
+  <text x="576" y="585" fill="#1677ff" font-size="12">签名</text>
+  <text x="708" y="585" fill="#000000d9" font-size="13">协同签名完成</text>
+  <text x="1038" y="585" fill="#000000d9" font-size="13">192.168.1.12</text>
+  <!-- Row 2 -->
+  <line x1="228" y1="601" x2="1136" y2="601" stroke="#f0f0f0" stroke-width="1"/>
+  <text x="248" y="620" fill="#000000d9" font-size="13">2026-03-03 14:28:45</text>
+  <text x="388" y="620" fill="#000000d9" font-size="13">user_def456</text>
+  <rect x="568" y="606" width="56" height="20" rx="10" fill="#f6ffed"/>
+  <text x="574" y="620" fill="#52c41a" font-size="12">密钥生成</text>
+  <text x="708" y="620" fill="#000000d9" font-size="13">协同密钥初始化</text>
+  <text x="1038" y="620" fill="#000000d9" font-size="13">10.0.0.5</text>
+  <!-- Row 3 -->
+  <line x1="228" y1="636" x2="1136" y2="636" stroke="#f0f0f0" stroke-width="1"/>
+  <text x="248" y="655" fill="#000000d9" font-size="13">2026-03-03 14:15:22</text>
+  <text x="388" y="655" fill="#000000d9" font-size="13">user_abc123</text>
+  <rect x="568" y="641" width="44" height="20" rx="10" fill="#fff7e6"/>
+  <text x="576" y="655" fill="#fa8c16" font-size="12">解密</text>
+  <text x="708" y="655" fill="#000000d9" font-size="13">协同解密完成</text>
+  <text x="1038" y="655" fill="#000000d9" font-size="13">192.168.1.12</text>
+  <!-- Row 4 -->
+  <line x1="228" y1="671" x2="1136" y2="671" stroke="#f0f0f0" stroke-width="1"/>
+  <text x="248" y="690" fill="#000000d9" font-size="13">2026-03-03 13:58:09</text>
+  <text x="388" y="690" fill="#000000d9" font-size="13">user_ghi789</text>
+  <rect x="568" y="676" width="44" height="20" rx="10" fill="#f9f0ff"/>
+  <text x="576" y="690" fill="#722ed1" font-size="12">登录</text>
+  <text x="708" y="690" fill="#000000d9" font-size="13">用户登录成功</text>
+  <text x="1038" y="690" fill="#000000d9" font-size="13">172.16.0.8</text>
+</svg>
