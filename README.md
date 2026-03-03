@@ -36,7 +36,53 @@ sm2-co-sign/
 
 ## 🚀 快速开始
 
-### 克隆仓库（包含子模块）
+### Docker 部署（推荐）
+
+```bash
+# 克隆仓库
+git clone --recursive https://github.com/kintaiW/sm2-co-sign.git
+cd sm2-co-sign
+
+# 一键启动
+docker compose up -d
+
+# 查看状态
+docker compose ps
+
+# 访问 Web 管理界面
+# http://localhost
+```
+
+验证部署：
+
+```bash
+# 健康检查
+curl http://localhost/mapi/health
+
+# 查看统计信息
+curl http://localhost/mapi/stats
+```
+
+### 获取 SDK 动态库
+
+构建并提取客户端 SDK（Linux .so + .a + C 头文件）：
+
+```bash
+DOCKER_BUILDKIT=1 docker build \
+  -f docker/Dockerfile.sdk \
+  --target sdk-output \
+  --output type=local,dest=./sdk \
+  --ssh default .
+
+# 产物:
+#   sdk/lib/libsm2_co_sign_ffi.so    # Linux 动态库
+#   sdk/lib/libsm2_co_sign_ffi.a     # Linux 静态库
+#   sdk/include/sm2_co_sign_ffi.h    # C 头文件
+```
+
+### 手动部署
+
+#### 克隆仓库（包含子模块）
 
 ```bash
 git clone --recursive https://github.com/kintaiW/sm2-co-sign.git
@@ -119,6 +165,34 @@ npm run dev
 │  完整私钥: d = d1 * d2 - 1 (不存储)                      │
 └─────────────────────────────────────────────────────────┘
 ```
+
+## 🐳 Docker 架构
+
+```
+┌─────────────────────────────────────────────────┐
+│                Docker Container                  │
+│                                                  │
+│  ┌──────────────────────────────────────────┐   │
+│  │  Nginx (:80)                              │   │
+│  │  ┌─────────────────┐ ┌────────────────┐  │   │
+│  │  │  /              │ │  /api/* /mapi/* │  │   │
+│  │  │  静态文件 (React) │ │  反向代理       │  │   │
+│  │  └─────────────────┘ └──────┬─────────┘  │   │
+│  └─────────────────────────────┼────────────┘   │
+│                                │                 │
+│  ┌─────────────────────────────▼────────────┐   │
+│  │  Go Backend (:9002)                       │   │
+│  │  SM2 协同签名服务 + SQLite                 │   │
+│  └──────────────────────────────────────────┘   │
+│                                                  │
+│  Volume: /app/data/ (SQLite 持久化)              │
+└─────────────────────────────────────────────────┘
+```
+
+| 端口 | 服务 | 说明 |
+|------|------|------|
+| 80 | Nginx | Web 管理界面 + API 统一入口 |
+| 9002 | Go Backend | 内部端口（可选暴露，调试用） |
 
 ## 📋 许可证
 

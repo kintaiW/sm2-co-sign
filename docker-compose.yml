@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  cosign:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: sm2-co-sign:latest
+    container_name: sm2-cosign
+    ports:
+      - "80:80"             # Web 界面 + API 统一入口 (Nginx)
+      # - "9002:9002"       # 后端直连端口（调试用，默认关闭）
+    volumes:
+      - cosign-data:/app/data        # SQLite 数据库持久化
+      # - ./custom-config.yaml:/app/config.yaml:ro   # 自定义配置（可选）
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:9002/mapi/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  cosign-data:
+    driver: local

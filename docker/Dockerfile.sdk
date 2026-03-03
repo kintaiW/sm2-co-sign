@@ -1,0 +1,55 @@
+# =============================================================
+# SM2 协同签名 SDK - 多阶段构建
+# 编译 Rust FFI 动态库 (.so) + 静态库 (.a) + C 头文件 (.h)
+#
+# 使用方式:
+#   # 构建并提取 SDK 到本地 ./sdk 目录
+#   DOCKER_BUILDKIT=1 docker build \
+#     -f docker/Dockerfile.sdk \
+#     --target sdk-output \
+#     --output type=local,dest=./sdk \
+#     --ssh default \
+#     .
+#
+#   # 产物:
+#   #   sdk/lib/libsm2_co_sign_ffi.so    (Linux 动态库)
+#   #   sdk/lib/libsm2_co_sign_ffi.a     (Linux 静态库)
+#   #   sdk/include/sm2_co_sign_ffi.h    (C 头文件)
+# =============================================================
+
+# ---- Stage 1: SDK Builder ----
+FROM rust:1.78-slim-bookworm AS sdk-builder
+
+# 安装构建依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    openssh-client \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# 配置 SSH（用于拉取 gm-sdk-rs 私有依赖）
+RUN mkdir -p /root/.ssh && \
+    ssh-keyscan github.com >> /root/.ssh/known_hosts 2>/dev/null
+
+# 安装 cbindgen（生成 C 头文件）
+RUN cargo install cbindgen
+
+WORKDIR /build
+COPY client/ ./
+
+# 设置 Cargo 使用系统 git CLI（SSH agent 转发）
+ENV CARGO_NET_GIT_FETCH_WITH_CLI=true
+
+# 构建 FFI 动态库和静态库
+RUN --mount=type=ssh cargo build --release -p sm2_co_sign_ffi
+
+# 生成 C 头文件
+RUN cbindgen --crate sm2_co_sign_ffi -o /build/sm2_co_sign_ffi.h
+
+
+# ---- Stage 2: SDK Output ----
+FROM scratch AS sdk-output
+
+COPY --from=sdk-builder /build/target/release/libsm2_co_sign_ffi.so /lib/libsm2_co_sign_ffi.so
+COPY --from=sdk-builder /build/target/release/libsm2_co_sign_ffi.a  /lib/libsm2_co_sign_ffi.a
+COPY --from=sdk-builder /build/sm2_co_sign_ffi.h                     /include/sm2_co_sign_ffi.h

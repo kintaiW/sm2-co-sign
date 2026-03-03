@@ -1,0 +1,35 @@
+# Git
+.git
+.gitmodules
+.gitignore
+
+# IDE
+.vscode
+.idea
+.trae
+*.swp
+
+# 构建产物
+backend/bin/
+backend/data/
+client/target/
+frontend/node_modules/
+frontend/dist/
+
+# Docker 相关（避免递归）
+docker-cosign/
+
+# 文档和计划
+*.md
+!backend/scripts/schema.sql
+docs/
+projectplan.md
+PROJECT_PLAN.md
+LICENSE
+
+# 临时文件
+*.log
+*.tmp
+.env
+.d1
+.token
