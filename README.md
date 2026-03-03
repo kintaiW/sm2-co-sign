@@ -112,6 +112,12 @@ npm run dev
 
 ## 📚 文档
 
+- [在线文档 (GitHub Pages)](https://kintaiW.github.io/sm2-co-sign/)
 - [架构设计](docs/architecture.md)
 - [API 参考](docs/api-reference.md)
 - [项目计划](PROJECT_PLAN.md)
+
+## 🔗 子模块文档
+
+- [客户端文档 (GitHub Pages)](https://kintaiW.github.io/sm2-co-sign-client/)
+- [服务端文档 (GitHub Pages)](https://kintaiW.github.io/sm2-co-sign-server/)
