@@ -1,0 +1,223 @@
+name: Release
+
+# 推送 v* 标签时触发（如 git tag v0.1.0 && git push origin v0.1.0）
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write   # 创建 Release 并上传附件
+  packages: write   # 推送 Docker 镜像到 GHCR
+
+jobs:
+
+  # ─────────────────────────────────────────────
+  # Job 1: 编译 Linux x86_64 客户端 FFI 动态库
+  # ─────────────────────────────────────────────
+  build-client-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout（含子模块）
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      # 配置 SSH，用于拉取私有依赖 gm-sdk-rs
+      - name: Setup SSH for gm-sdk-rs
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      # 缓存 Cargo 注册表和构建产物，加快后续构建
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            client/target
+          key: linux-cargo-${{ hashFiles('client/Cargo.lock') }}
+          restore-keys: linux-cargo-
+
+      - name: Install cbindgen
+        run: cargo install cbindgen --locked
+
+      - name: Build FFI library (Linux)
+        working-directory: client
+        env:
+          # Reason: gm-sdk-rs 通过 SSH URL 引用，需要系统 git CLI 才能使用 SSH agent
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+        run: cargo build --release -p sm2_co_sign_ffi
+
+      - name: Generate C header
+        working-directory: client
+        run: cbindgen --crate sm2_co_sign_ffi -o sm2_co_sign_ffi.h
+
+      - name: Package SDK (Linux)
+        run: |
+          mkdir -p sdk/lib sdk/include
+          cp client/target/release/libsm2_co_sign_ffi.so  sdk/lib/
+          cp client/target/release/libsm2_co_sign_ffi.a   sdk/lib/
+          cp client/sm2_co_sign_ffi.h                      sdk/include/
+          tar -czf sm2-co-sign-sdk-linux-x86_64.tar.gz -C sdk .
+
+      - name: Upload Linux SDK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sdk-linux
+          path: sm2-co-sign-sdk-linux-x86_64.tar.gz
+
+  # ─────────────────────────────────────────────
+  # Job 2: 编译 macOS ARM64 客户端 FFI 动态库
+  # ─────────────────────────────────────────────
+  build-client-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout（含子模块）
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup SSH for gm-sdk-rs
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            client/target
+          key: macos-cargo-${{ hashFiles('client/Cargo.lock') }}
+          restore-keys: macos-cargo-
+
+      - name: Install cbindgen
+        run: cargo install cbindgen --locked
+
+      - name: Build FFI library (macOS)
+        working-directory: client
+        env:
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+        run: cargo build --release -p sm2_co_sign_ffi
+
+      - name: Generate C header
+        working-directory: client
+        run: cbindgen --crate sm2_co_sign_ffi -o sm2_co_sign_ffi.h
+
+      - name: Package SDK (macOS)
+        run: |
+          mkdir -p sdk/lib sdk/include
+          cp client/target/release/libsm2_co_sign_ffi.dylib sdk/lib/
+          cp client/sm2_co_sign_ffi.h                        sdk/include/
+          tar -czf sm2-co-sign-sdk-macos-arm64.tar.gz -C sdk .
+
+      - name: Upload macOS SDK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sdk-macos
+          path: sm2-co-sign-sdk-macos-arm64.tar.gz
+
+  # ─────────────────────────────────────────────
+  # Job 3: 构建并推送 Docker 镜像到 GHCR
+  # ─────────────────────────────────────────────
+  build-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout（含子模块）
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 提取镜像标签：版本号（如 0.1.0）+ latest
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=raw,value=latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  # ─────────────────────────────────────────────
+  # Job 4: 创建 GitHub Release，附加所有产物
+  # ─────────────────────────────────────────────
+  release:
+    needs: [build-client-linux, build-client-macos, build-docker]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Linux SDK
+        uses: actions/download-artifact@v4
+        with:
+          name: sdk-linux
+
+      - name: Download macOS SDK
+        uses: actions/download-artifact@v4
+        with:
+          name: sdk-macos
+
+      - name: Write release notes
+        run: |
+          cat > release-notes.md << 'EOF'
+          ## 📦 发布说明
+
+          ### 🐳 Docker 镜像（backend + frontend）
+
+          ```bash
+          # 拉取并运行
+          docker pull ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          docker run -d -p 80:80 \
+            -v cosign-data:/app/data \
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+
+          # 访问 Web 管理界面
+          # http://localhost
+          ```
+
+          ### 📚 Client SDK 动态库
+
+          | 平台 | 文件 | 内容 |
+          |------|------|------|
+          | Linux x86_64 | `sm2-co-sign-sdk-linux-x86_64.tar.gz` | `lib/libsm2_co_sign_ffi.so` · `lib/libsm2_co_sign_ffi.a` · `include/sm2_co_sign_ffi.h` |
+          | macOS ARM64  | `sm2-co-sign-sdk-macos-arm64.tar.gz`  | `lib/libsm2_co_sign_ffi.dylib` · `include/sm2_co_sign_ffi.h` |
+
+          ### ⚙️ 前置条件
+
+          - 需要在仓库 Secrets 中配置 `SSH_PRIVATE_KEY`（拉取 `gm-sdk-rs` 私有依赖所需）
+          EOF
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: release-notes.md
+          files: |
+            sm2-co-sign-sdk-linux-x86_64.tar.gz
+            sm2-co-sign-sdk-macos-arm64.tar.gz

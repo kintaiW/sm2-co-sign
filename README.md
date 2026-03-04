@@ -1,5 +1,8 @@
 # SM2 协同签名项目
 
+[![Release](https://img.shields.io/github/v/release/kintaiW/sm2-co-sign)](https://github.com/kintaiW/sm2-co-sign/releases)
+[![Docker Image](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/kintaiW/sm2-co-sign/pkgs/container/sm2-co-sign)
+
 基于 SM2 国密算法的协同签名系统，采用客户端-服务端分离架构，实现密钥分片存储和协同签名/解密功能。
 
 ## 📦 项目结构
@@ -65,7 +68,14 @@ curl http://localhost/mapi/stats
 
 ### 获取 SDK 动态库
 
-构建并提取客户端 SDK（Linux .so + .a + C 头文件）：
+**推荐**：直接从 [GitHub Releases](https://github.com/kintaiW/sm2-co-sign/releases) 页面下载预编译的 SDK 压缩包：
+
+| 平台 | 文件 |
+|------|------|
+| Linux x86_64 | `sm2-co-sign-sdk-linux-x86_64.tar.gz` |
+| macOS ARM64  | `sm2-co-sign-sdk-macos-arm64.tar.gz`  |
+
+**本地构建**（需要 Docker + SSH key 访问 `gm-sdk-rs`）：
 
 ```bash
 DOCKER_BUILDKIT=1 docker build \
