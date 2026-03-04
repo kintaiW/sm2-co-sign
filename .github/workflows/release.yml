@@ -210,17 +210,20 @@ jobs:
           cat > release-notes.md << 'EOF'
           ## 📦 发布说明
 
-          ### 🐳 Docker 镜像（backend + frontend）
+          ### 🐳 Docker 镜像（后端服务）
 
           ```bash
           # 拉取并运行
           docker pull ghcr.io/${{ github.repository }}:${{ github.ref_name }}
-          docker run -d -p 80:80 \
+          docker run -d \
+            -p 7094:7094 \
+            -p 7093:7093 \
             -v cosign-data:/app/data \
             ghcr.io/${{ github.repository }}:${{ github.ref_name }}
 
-          # 访问 Web 管理界面
-          # http://localhost
+          # 业务接口: http://localhost:7094/api/*
+          # 管理接口: http://localhost:7093/mapi/*
+          # 健康检查: curl http://localhost:7093/mapi/health
           ```
 
           ### 📚 Client SDK 动态库

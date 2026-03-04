@@ -53,7 +53,7 @@ Authorization: Bearer <token>
 
 ## 2. 业务 API
 
-业务 API 运行在 **端口 9002**
+业务 API 运行在 **端口 7094**
 
 ### 2.1 用户注册
 
@@ -309,7 +309,7 @@ Authorization: Bearer <token>
 
 ## 3. 管理 API
 
-管理 API 运行在 **端口 9002**，路径前缀 `/mapi`
+管理 API 运行在 **端口 7093**，路径前缀 `/mapi`
 
 ### 3.1 用户管理
 
@@ -514,7 +514,7 @@ Authorization: Bearer <token>
 
 ```bash
 # 1. 用户注册
-curl -X POST https://server:9002/api/register \
+curl -X POST https://server:7094/api/register \
   -H "Content-Type: application/json" \
   -d '{
     "username": "user001",
@@ -523,12 +523,12 @@ curl -X POST https://server:9002/api/register \
   }'
 
 # 2. 获取登录挑战
-curl -X POST https://server:9002/api/challenge \
+curl -X POST https://server:7094/api/challenge \
   -H "Content-Type: application/json" \
   -d '{"username": "user001"}'
 
 # 3. 用户登录
-curl -X POST https://server:9002/api/login \
+curl -X POST https://server:7094/api/login \
   -H "Content-Type: application/json" \
   -d '{
     "username": "user001",
@@ -537,7 +537,7 @@ curl -X POST https://server:9002/api/login \
   }'
 
 # 4. 协同签名
-curl -X POST https://server:9002/api/sign \
+curl -X POST https://server:7094/api/sign \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{
@@ -553,7 +553,7 @@ use sm2_co_sign_client::Sm2CoSignClient;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let client = Sm2CoSignClient::new("https://localhost:9002");
+    let client = Sm2CoSignClient::new("https://localhost:7094");
     
     // 注册
     let (user_id, pa) = client.register("user001", "password123").await?;

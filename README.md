@@ -10,8 +10,7 @@
 ```
 sm2-co-sign/
 ├── backend/          # 服务端 (Go) - Submodule
-├── client/           # 客户端 (Rust) - Submodule  
-├── frontend/         # Web 管理界面 (React)
+├── client/           # 客户端 (Rust) - Submodule
 ├── docs/             # 技术文档
 └── scripts/          # 测试脚本
 ```
@@ -20,22 +19,8 @@ sm2-co-sign/
 
 | 模块 | 仓库 | 技术栈 | 描述 |
 |------|------|--------|------|
-| **backend** | [sm2-co-sign-server](https://github.com/kintaiW/sm2-co-sign-server) | Go 1.24 + Fiber v2 | 协同签名服务端，提供 REST API |
-| **client** | [sm2-co-sign-client](https://github.com/kintaiW/sm2-co-sign-client) | Rust 2021 + libsm | 协同签名客户端，支持 FFI 接口 |
-
-## 🖼️ 界面预览
-
-### 登录页
-![登录页](docs/screenshots/login.svg)
-
-### 仪表盘
-![仪表盘](docs/screenshots/dashboard.svg)
-
-### 用户管理
-![用户管理](docs/screenshots/users.svg)
-
-### 签名服务
-![签名服务](docs/screenshots/sign.svg)
+| **backend** | [sm2-co-sign-server](https://github.com/kintaiW/sm2-co-sign-server) | Go 1.24 + Fiber v2 | 协同签名服务端，双端口（业务 7094 / 管理 7093） |
+| **client** | [sm2-co-sign-client](https://github.com/kintaiW/sm2-co-sign-client) | Rust 2021 + libsm | 协同签名客户端 CLI + FFI 接口 |
 
 ## 🚀 快速开始
 
@@ -51,19 +36,16 @@ docker compose up -d
 
 # 查看状态
 docker compose ps
-
-# 访问 Web 管理界面
-# http://localhost
 ```
 
 验证部署：
 
 ```bash
-# 健康检查
-curl http://localhost/mapi/health
+# 健康检查（管理端口）
+curl http://localhost:7093/mapi/health
 
 # 查看统计信息
-curl http://localhost/mapi/stats
+curl http://localhost:7093/mapi/stats
 ```
 
 ### 获取 SDK 动态库
@@ -74,21 +56,6 @@ curl http://localhost/mapi/stats
 |------|------|
 | Linux x86_64 | `sm2-co-sign-sdk-linux-x86_64.tar.gz` |
 | macOS ARM64  | `sm2-co-sign-sdk-macos-arm64.tar.gz`  |
-
-**本地构建**（需要 Docker + SSH key 访问 `gm-sdk-rs`）：
-
-```bash
-DOCKER_BUILDKIT=1 docker build \
-  -f docker/Dockerfile.sdk \
-  --target sdk-output \
-  --output type=local,dest=./sdk \
-  --ssh default .
-
-# 产物:
-#   sdk/lib/libsm2_co_sign_ffi.so    # Linux 动态库
-#   sdk/lib/libsm2_co_sign_ffi.a     # Linux 静态库
-#   sdk/include/sm2_co_sign_ffi.h    # C 头文件
-```
 
 ### 手动部署
 
@@ -108,26 +75,37 @@ git submodule update --init --recursive
 cd backend
 go mod tidy
 go run cmd/server/main.go
+# 业务接口: http://localhost:7094/api/*
+# 管理接口: http://localhost:7093/mapi/*
 ```
 
-### 构建客户端
+### 构建客户端 CLI
 
 ```bash
 cd client
 cargo build --release
+# 使用示例
+./target/release/sm2-co-sign --server http://localhost:7094 register -u user1 -p pass123
+./target/release/sm2-co-sign --server http://localhost:7094 login -u user1 -p pass123
+./target/release/sm2-co-sign --server http://localhost:7094 sign -m ./message.txt
 ```
 
-### 启动前端
+### 管理工具（Admin CLI）
 
 ```bash
-cd frontend
-npm install
-npm run dev
+cd backend
+go build -o bin/sm2-admin ./cmd/admin/main.go
+# 使用示例（连接管理端口 7093）
+./bin/sm2-admin user list
+./bin/sm2-admin key list
+./bin/sm2-admin log list --limit 20
+./bin/sm2-admin stats
+./bin/sm2-admin health
 ```
 
 ## 📡 API 接口
 
-### 业务接口 (/api/*)
+### 业务接口 (/api/*) — 端口 7094
 
 | 接口 | 方法 | 描述 |
 |------|------|------|
@@ -136,7 +114,7 @@ npm run dev
 | `/api/sign` | POST | 协同签名 |
 | `/api/decrypt` | POST | 协同解密 |
 
-### 管理接口 (/mapi/*)
+### 管理接口 (/mapi/*) — 端口 7093
 
 | 接口 | 方法 | 描述 |
 |------|------|------|
@@ -179,30 +157,24 @@ npm run dev
 ## 🐳 Docker 架构
 
 ```
-┌─────────────────────────────────────────────────┐
-│                Docker Container                  │
-│                                                  │
-│  ┌──────────────────────────────────────────┐   │
-│  │  Nginx (:80)                              │   │
-│  │  ┌─────────────────┐ ┌────────────────┐  │   │
-│  │  │  /              │ │  /api/* /mapi/* │  │   │
-│  │  │  静态文件 (React) │ │  反向代理       │  │   │
-│  │  └─────────────────┘ └──────┬─────────┘  │   │
-│  └─────────────────────────────┼────────────┘   │
-│                                │                 │
-│  ┌─────────────────────────────▼────────────┐   │
-│  │  Go Backend (:9002)                       │   │
-│  │  SM2 协同签名服务 + SQLite                 │   │
-│  └──────────────────────────────────────────┘   │
-│                                                  │
-│  Volume: /app/data/ (SQLite 持久化)              │
-└─────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────┐
+│                Docker Container                      │
+│                                                      │
+│  ┌──────────────────────────────────────────────┐   │
+│  │  Go Backend                                   │   │
+│  │  :7094  /api/*   (业务接口，需 Bearer Token)   │   │
+│  │  :7093  /mapi/*  (管理接口)                   │   │
+│  │  SQLite 数据库                                │   │
+│  └──────────────────────────────────────────────┘   │
+│                                                      │
+│  Volume: /app/data/ (SQLite 持久化)                  │
+└─────────────────────────────────────────────────────┘
 ```
 
-| 端口 | 服务 | 说明 |
+| 端口 | 路由 | 说明 |
 |------|------|------|
-| 80 | Nginx | Web 管理界面 + API 统一入口 |
-| 9002 | Go Backend | 内部端口（可选暴露，调试用） |
+| 7094 | `/api/*` | 业务接口（注册/登录/签名/解密） |
+| 7093 | `/mapi/*` | 管理接口（用户/密钥/日志/监控） |
 
 ## 📋 许可证
 
@@ -213,7 +185,6 @@ npm run dev
 - [在线文档 (GitHub Pages)](https://kintaiW.github.io/sm2-co-sign/)
 - [架构设计](docs/architecture.md)
 - [API 参考](docs/api-reference.md)
-- [项目计划](PROJECT_PLAN.md)
 
 ## 🔗 子模块文档
 

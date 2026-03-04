@@ -7,7 +7,7 @@ set -e
 echo "=== SM2 协同签名集成测试 ==="
 
 # 测试配置
-BASE_URL="http://localhost:9002"
+BASE_URL="http://localhost:7094"
 APP_ID="test_app"
 AUTH_TOKEN="test_token"
 USERTAG="test_user"

@@ -10,7 +10,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 # 配置
-SERVER_URL="${SERVER_URL:-https://localhost:9002}"
+SERVER_URL="${SERVER_URL:-https://localhost:7094}"
 APP_ID="${APP_ID:-test_app_001}"
 TEST_MESSAGE="This is a secret message for encryption test"
 

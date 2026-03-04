@@ -224,7 +224,6 @@
             <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License">
             <img src="https://img.shields.io/badge/Go-1.24-00ADD8?logo=go" alt="Go">
             <img src="https://img.shields.io/badge/Rust-2021-orange?logo=rust" alt="Rust">
-            <img src="https://img.shields.io/badge/React-18-61DAFB?logo=react" alt="React">
         </div>
     </header>
 
@@ -253,7 +252,6 @@
             <div class="tech-stack">
                 <span class="tech-badge">Go 1.24</span>
                 <span class="tech-badge">Rust 2021</span>
-                <span class="tech-badge">React 18</span>
                 <span class="tech-badge">SM2/SM3/SM4</span>
                 <span class="tech-badge">SQLite</span>
                 <span class="tech-badge">Fiber v2</span>
@@ -281,8 +279,8 @@
                     <p>提供完整的 REST API 接口，支持业务系统快速集成。</p>
                 </div>
                 <div class="feature-card">
-                    <h4>🖥️ Web 管理控制台</h4>
-                    <p>提供用户管理、密钥管理、审计日志等管理功能。</p>
+                    <h4>🖥️ CLI 管理工具</h4>
+                    <p>提供用户管理、密钥管理、审计日志等 CLI 管理功能。</p>
                 </div>
                 <div class="feature-card">
                     <h4>📦 多平台支持</h4>
@@ -297,7 +295,7 @@
 ┌─────────────────────────────────────────────────────────────┐
 │                        应用层                                │
 ├──────────────────────┬──────────────────────────────────────┤
-│  业务应用系统         │  Web 管理控制台                      │
+│  业务应用系统         │  Admin CLI 管理工具                  │
 │  - 签名请求          │  - 密钥管理                          │
 │  - 加密请求          │  - 用户管理                          │
 │  - 验证请求          │  - 日志审计                          │
@@ -305,7 +303,7 @@
            │                       │
            ▼                       ▼
 ┌──────────────────────┐  ┌──────────────────────────────────┐
-│  客户端 SDK (Rust)   │  │  HTTP API (管理端口)             │
+│  客户端 SDK (Rust)   │  │  HTTP API (管理端口: 7093)             │
 │  - 密钥分片          │  │  - GET /mapi/users               │
 │  - 密码计算          │  │  - GET /mapi/keys                │
 │  - FFI 接口          │  │  - GET /mapi/logs                │
@@ -315,7 +313,7 @@
 ┌─────────────────────────────────────────────────────────────┐
 │                    服务端 (Go + Fiber)                       │
 ├─────────────────────────────────────────────────────────────┤
-│  HTTP API (业务端口: 9002)                                  │
+│  HTTP API (业务端口: 7094)                                  │
 │  - POST /api/register    用户注册                           │
 │  - POST /api/login       用户登录                           │
 │  - POST /api/sign        协同签名                            │
@@ -343,9 +341,9 @@
                     <td>客户端 SDK，支持 FFI 接口</td>
                 </tr>
                 <tr>
-                    <td><strong>frontend</strong></td>
-                    <td>React 18 + Ant Design</td>
-                    <td>Web 管理控制台</td>
+                    <td><strong>admin-cli</strong></td>
+                    <td>Go CLI (cobra)</td>
+                    <td>Admin CLI 管理工具</td>
                 </tr>
             </table>
         </section>
@@ -366,10 +364,15 @@ go run cmd/server/main.go</code></pre>
             <pre><code>cd client
 cargo build --release</code></pre>
 
-            <h3>启动前端</h3>
-            <pre><code>cd frontend
-npm install
-npm run dev</code></pre>
+            <h3>使用 Admin CLI</h3>
+            <pre><code># 查看用户列表（管理端口: 7093）
+curl http://localhost:7093/mapi/users
+
+# 查看密钥列表
+curl http://localhost:7093/mapi/keys
+
+# 查看审计日志
+curl http://localhost:7093/mapi/logs</code></pre>
 
             <div class="warning-box">
                 <strong>⚠️ 安全提示：</strong>生产环境请务必修改默认管理员密码，并配置 HTTPS。
